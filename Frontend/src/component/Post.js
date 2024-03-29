@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import './css/post.css';
 import { Avatar } from '@material-ui/core';
 import {
@@ -10,14 +10,12 @@ import {
   ShareOutlined,
 } from "@material-ui/icons";
 import CloseIcon from "@material-ui/icons/Close";
-import { useState } from "react";
+import Modal from 'react-responsive-modal';
+import 'react-responsive-modal/styles.css';
+import ReactTimeAgo from 'react-time-ago';
+import axios from 'axios';
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-// import ReactTimeAgo from "react-time-ago";
-import Modal from 'react-responsive-modal';
-import 'react-responsive-modal/styles.css'
-import ReactTimeAgo from 'react-time-ago'
-import axios from 'axios';
 import ReactHtmlParser from "html-react-parser";
 
 function LastSeen({ date }) {
@@ -25,18 +23,22 @@ function LastSeen({ date }) {
     <div>
       <ReactTimeAgo date={date} locale="en-US" timeStyle="round" />
     </div>
-  )
+  );
 }
+
 function Post({ post }) {
-
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFollowing, setFollowing] = useState(false);
   const [answer, setAnswer] = useState("");
+  const [isUpvoted, setIsUpvoted] = useState(false);
+  const [isDownvoted, setIsDownvoted] = useState(false);
+
   const Close = <CloseIcon />;
+
   const handleQuill = (value) => {
     setAnswer(value);
   };
+
   const handleSubmit = async () => {
     if (post?._id && answer !== "") {
       const config = {
@@ -48,19 +50,37 @@ function Post({ post }) {
         answer: answer,
         questionId: post?._id
       };
-      await axios
-        .post("/api/answers", body, config)
-        .then((res) => {
-          console.log(res.data);
-          alert("Answer added succesfully");
-          setIsModalOpen(false);
-          window.location.href = "/";
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      try {
+        const res = await axios.post("/api/answers", body, config);
+        console.log(res.data);
+        alert("Answer added successfully");
+        setIsModalOpen(false);
+        window.location.href = "/";
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
+
+  const handleUpvote = () => {
+    // Handle upvote functionality here
+    console.log("Upvoted!");
+    setIsUpvoted(true);
+    setIsDownvoted(false); // Reset downvote state
+  };
+
+  const handleDownvote = () => {
+    // Handle downvote functionality here
+    console.log("Downvoted!");
+    setIsUpvoted(false); // Reset upvote state
+    setIsDownvoted(true);
+  };
+
+  const handleDownload = () => {
+    // Handle download functionality here
+    console.log("Downloaded!");
+  };
+
   return (
     <div className='post'>
       <div className='post-info'>
@@ -69,14 +89,14 @@ function Post({ post }) {
 
         <small>
           <LastSeen date={post?.createdAt} />
-
         </small>
         <span className="post-info-follow" style={{
           paddingTop: '2px', marginLeft: 'auto', fontSize: '13px', cursor: 'pointer',
           textDecoration: isFollowing ? 'underline' : 'none',
           color: isFollowing ? 'blue' : 'gray',
-
-        }} onClick={() => setFollowing(prevState => !prevState)}>{isFollowing ? 'Following' : 'Follow'}  </span>
+        }} onClick={() => setFollowing(prevState => !prevState)}>
+          {isFollowing ? 'Following' : 'Follow'}
+        </span>
       </div>
 
       <div className='post-body'>
@@ -96,8 +116,6 @@ function Post({ post }) {
                 height: "auto",
               },
             }}
-
-
           >
             <div className="modal-question">
               <h1>{post?.questionName}</h1>
@@ -125,27 +143,32 @@ function Post({ post }) {
             </div>
           </Modal>
         </div>
-
         {post.questionUrl !== "" && <img src={post.questionUrl} alt="url" />}
       </div>
+
       <div className='post-footer'>
         <div className='post-footer-activity'>
-          <ArrowUpwardOutlined />
-          <ArrowDownwardOutlined />
-
+          <ArrowUpwardOutlined
+            onClick={handleUpvote}
+            style={{ color: isUpvoted ? 'orange' : 'black' }}
+          />
+          <ArrowDownwardOutlined
+            onClick={handleDownvote}
+            style={{ color: isDownvoted ? 'orange' : 'black' }}
+          />
         </div>
+
         <div className='post-footer-feature'>
           <RepeatOneOutlined />
           <ChatBubbleOutlined />
         </div>
 
-
         <div className='post-footer-right'>
           <ShareOutlined />
-          <MoreHorizOutlined />
+          <MoreHorizOutlined onClick={handleDownload} />
         </div>
-
       </div>
+
       <p style={{
         color: 'gray',
         fontSize: "14px",
@@ -155,16 +178,8 @@ function Post({ post }) {
         {post?.allAnswers.length} Answer(s)
       </p>
 
-      {/* <div
-        style={{
-          margin: "5px 0px 0px 0px ",
-          padding: "5px 0px 0px 20px",
-          borderTop: "1px solid lightgray",
-        }}
-        className="post__answer"
-      ></div> */}
       {post?.allAnswers?.map((_a) => (
-        <div>
+        <div key={_a._id}>
           <div
             style={{
               display: "flex",
@@ -204,8 +219,7 @@ function Post({ post }) {
         </div>
       ))}
     </div>
-    // </div>
-  )
+  );
 }
 
-export default Post
+export default Post;
