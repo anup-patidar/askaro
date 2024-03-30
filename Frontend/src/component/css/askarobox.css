@@ -30,3 +30,32 @@
     display: flex;
     margin-top:8px;
   }
+
+  .askarobox {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .askarobox-profile {
+    margin-right: 10px;
+  }
+  
+  .askarobox-content {
+    flex: 1;
+  }
+  
+  .askarobox-question input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+  }
+  
+  .askarobox-question input::placeholder {
+    color: #aaa;
+  }
+  

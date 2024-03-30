@@ -20,15 +20,9 @@ function Feed() {
   }, []);
   return(
     <div className='askaro-feed'>
-       <Askarobox />
-       {/* <Post /> */}
        {posts.map((post, index) => (
         <Post key={index} post={post} />
       ))}
-       {/* <Post />
-       <Post />
-       <Post />
-       <Post /> */}
     </div>
   )
 }

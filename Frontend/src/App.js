@@ -9,27 +9,31 @@ import { auth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 function App() {
   const user = useSelector(selectUser);
+  // console.log(user.)
   const dispatch = useDispatch();
+  const handleUserLogin = (user) => {
+    dispatch(
+        login({
+            userName: user.displayName,
+            photo: user.photoURL,
+            email: user.email,
+            uid: user.uid,
+        })
+    );
+};
   useEffect(() => {
     onAuthStateChanged(auth, (authUser) => {
       if (authUser) {
-        dispatch(
-          login({
-            userName: authUser.displayName,
-            photo: authUser.photoURL,
-            email: authUser.email,
-            uid: authUser.uid,
-          })
-        );
-        console.log("AuthUser", authUser);
+        handleUserLogin(authUser); // Call the function to handle user login
+        console.log("AuthUser", authUser.displayName);
       }
     });
   }, [dispatch]);
   return (
     <div className='App'>
-      {user ? <Askaro /> : <Login />}
+        {user ? <Askaro /> : <Login onUserLoggedIn={handleUserLogin} />} {/* Pass the handleUserLogin function as a prop */}
     </div>
-  );
+);
 }
 
 export default App;

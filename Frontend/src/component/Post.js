@@ -4,10 +4,7 @@ import { Avatar } from '@material-ui/core';
 import {
   ArrowDownwardOutlined,
   ArrowUpwardOutlined,
-  ChatBubbleOutlined,
   MoreHorizOutlined,
-  RepeatOneOutlined,
-  ShareOutlined,
 } from "@material-ui/icons";
 import CloseIcon from "@material-ui/icons/Close";
 import Modal from 'react-responsive-modal';
@@ -158,13 +155,8 @@ function Post({ post }) {
           />
         </div>
 
-        <div className='post-footer-feature'>
-          <RepeatOneOutlined />
-          <ChatBubbleOutlined />
-        </div>
 
         <div className='post-footer-right'>
-          <ShareOutlined />
           <MoreHorizOutlined onClick={handleDownload} />
         </div>
       </div>

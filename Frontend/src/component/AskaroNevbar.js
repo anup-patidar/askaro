@@ -47,16 +47,19 @@ function AskaroNevbar() {
         });
     }
   };
-
+  const handleLogoClick = () => {
+    // Reload the page when the logo is clicked
+    window.location.reload();
+  };
   return (
     <div className='Askaro-nevbar'>
       <div className='Askaro-nevbar-content'>
-        <div className='Askaro-nevbar-logo'>
+        <div className='Askaro-nevbar-logo' onClick={handleLogoClick}>
           <img src={Askarologo} alt="logo" />
-          <h4 style={{color:'#b92b27', margin:'7px 0px' ,fontSize:'20px'}}>Askaro</h4>
+          <h4 style={{ color: '#b92b27', margin: '7px 0px', fontSize: '20px' }}>Askaro</h4>
         </div>
         <div className='Askaro-nevbar-icons'>
-          <div className='Askaro-nevbar-icon'><HomeIcon /></div>
+          <div className='Askaro-nevbar-icon' onClick={handleLogoClick}><HomeIcon /></div>
           <div className='Askaro-nevbar-icon'><FeaturedPlaylistOutlinedIcon /></div>
           <div className='Askaro-nevbar-icon'><AssignmentTurnedInOutlined /></div>
           <div className='Askaro-nevbar-icon'><PeopleAltOutlined /></div>

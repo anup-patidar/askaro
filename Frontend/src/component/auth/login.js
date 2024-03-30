@@ -4,7 +4,7 @@ import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
 
-function Login() {
+function Login({onUserLoggedIn}) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -17,6 +17,7 @@ function Login() {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
             console.log("User signed in:", user);
+            onUserLoggedIn(user);
             // Additional logic after sign-in
         } catch (error) {
             console.error("Error signing in:", error);
@@ -51,7 +52,7 @@ function Login() {
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
-            console.log("User signed in with Google:", user);
+            console.log("User signed in with Google:", user.displayName);
             // Additional logic after signing in with Google
         } catch (error) {
             console.error("Error signing in with Google:", error);

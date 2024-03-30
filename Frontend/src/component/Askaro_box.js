@@ -1,19 +1,21 @@
-import { Avatar } from '@material-ui/core'
-import React from 'react'
-import './css/askarobox.css'
+import { Avatar } from '@material-ui/core';
+import React from 'react';
+import './css/askarobox.css';
 
-function askarobox() {
+function Askarobox() {
   return (
     <div className='askarobox'>
-       <div className='askarobox-profile'>
-         <Avatar />
-       </div>
+      <div className='askarobox-profile'>
+        <Avatar />
+      </div>
 
-       <div className='askarobox-question'>
-        <h5>What is your question</h5>
+      <div className='askarobox-content'>
+        <div className='askarobox-question'>
+          <input type="text" placeholder="What is your question" />
         </div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default askarobox
+export default Askarobox;
